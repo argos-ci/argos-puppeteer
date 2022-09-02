@@ -29,6 +29,6 @@ jobs:
         run: npm run test
 
       - name: Argos upload screenshots
-        run: npx argos upload screenshots
+        run: npx @argos-ci/cli upload screenshots-folder
         env:
           ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
