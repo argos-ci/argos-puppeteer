@@ -1,7 +1,7 @@
-import * as Puppeteer from "puppeteer";
+import type { Page, ScreenshotOptions } from "puppeteer";
 
-export default function argosScreenshot(
-  page: Puppeteer.Page,
+export function argosScreenshot(
+  page: Page,
   name: string,
-  options?: Puppeteer.ScreenshotOptions
+  options?: ScreenshotOptions
 ): Promise<void>;

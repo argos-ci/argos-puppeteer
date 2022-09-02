@@ -30,13 +30,7 @@ async puppeteerScreenshot(url) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto('http://my-site.com/', { waitUntil: 'networkidle2' });
-
-  // Screenshot a full page
   await argosScreenshot(page, 'home');
-
-  // Screenshot a component
-  const breadcrumb = await page.waitForSelector('main div.breadcrumb');
-  await argosScreenshot(breadcrumb, "breadcrumb")
 
   await browser.close();
 };

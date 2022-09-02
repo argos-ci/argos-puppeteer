@@ -1,15 +1,16 @@
 import "expect-puppeteer";
-import { existsSync } from "fs";
 import puppeteer from "puppeteer";
 import { argosScreenshot } from "./index";
+import { existsFile } from "./utils";
 
-const screenshotsFolder = `${process.env.PWD}/screenshots`;
+const screenshotsFolder = "screenshots";
 
 describe("argosScreenshot", () => {
   let browser;
   let page;
-  const url = `file://${process.env.PWD}/fixtures/dummy.html`;
+  const url = new URL("fixtures/dummy.html", import.meta.url).href;
   const screenshotName = "dummy-page.png";
+  const screenshotPath = `${screenshotsFolder}/${screenshotName}`;
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
@@ -17,7 +18,7 @@ describe("argosScreenshot", () => {
     });
     page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
-    await argosScreenshot(page, `${screenshotsFolder}/${screenshotName}`);
+    await argosScreenshot(page, screenshotPath);
   }, 30000);
 
   afterAll(() => {
@@ -49,24 +50,18 @@ describe("argosScreenshot", () => {
       expect(displayStyle).toBe("none");
     });
 
-    it("takes a screenshot", () => {
-      expect(existsSync(`${screenshotsFolder}/${screenshotName}`)).toBe(true);
-    });
-  });
-
-  describe("with specified component", () => {
-    it("should take a component screenshot", async () => {
-      const breadcrumb = await page.waitForSelector(".red-square");
-      await argosScreenshot(breadcrumb, `${screenshotsFolder}/red-square.png`);
+    it("takes a screenshot", async () => {
+      const fileExists = await existsFile(screenshotPath);
+      expect(fileExists).toBe(true);
     });
   });
 
   describe("with omitBackground options", () => {
     it("should take a screenshot without background", async () => {
-      await argosScreenshot(page, `${screenshotsFolder}/no-background.png`, {
-        omitBackground: true,
-      });
-      expect(existsSync(`${screenshotsFolder}/no-background.png`)).toBe(true);
+      const screenshotPath = `${screenshotsFolder}/no-background.png`;
+      await argosScreenshot(page, screenshotPath, { omitBackground: true });
+      const fileExists = await existsFile(screenshotPath);
+      expect(fileExists).toBe(true);
     });
   });
 
@@ -76,7 +71,7 @@ describe("argosScreenshot", () => {
       try {
         await argosScreenshot(page);
       } catch (error) {
-        expect(error.message).toBe("The `name` argument is required.");
+        expect(error.message).toBe("A `name` argument is required.");
       }
     });
   });
@@ -87,9 +82,7 @@ describe("argosScreenshot", () => {
       try {
         await argosScreenshot(null, `${screenshotsFolder}/${screenshotName}`);
       } catch (error) {
-        expect(error.message).toBe(
-          "An instance of Puppeteer `page` object is required."
-        );
+        expect(error.message).toBe("A Puppeteer `Page` is required.");
       }
     });
   });
