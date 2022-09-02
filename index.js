@@ -1,3 +1,6 @@
+import { resolve } from "node:path";
+import mkdirp from "mkdirp";
+
 const GLOBAL_STYLES = `
   /* Hide carets */
   * { caret-color: transparent !important; }
@@ -40,22 +43,22 @@ function waitForFontLoading() {
   return document.fonts.status === "loaded";
 }
 
-/**
- * Takes a screenshot for Argos.
- */
-export async function argosScreenshot(page, name, options = {}) {
-  if (!page) throw new Error("A Puppeteer `Page` is required.");
-  if (!name) throw new Error("A `name` argument is required.");
+export async function argosScreenshot(page, name, { fullPage, clip } = {}) {
+  if (!page) throw new Error("A Puppeteer `page` object is required.");
+  if (!name) throw new Error("The `name` argument is required.");
 
-  try {
-    await Promise.all([
-      page.addStyleTag({ content: GLOBAL_STYLES }),
-      page.waitForFunction(ensureNoBusy),
-      page.waitForFunction(waitForFontLoading),
-    ]);
-    await page.screenshot({ path: name, ...options });
-  } catch (err) {
-    console.error(`Could not take the screenshot "${name}"`);
-    console.error(err);
-  }
+  await Promise.all([
+    page.addStyleTag({ content: GLOBAL_STYLES }),
+    page.waitForFunction(ensureNoBusy),
+    page.waitForFunction(waitForFontLoading),
+  ]);
+
+  const directory = resolve(process.cwd(), "screenshots/argos");
+  await mkdirp(directory);
+  await page.screenshot({
+    path: resolve(directory, `${name}.png`),
+    type: "png",
+    fullPage,
+    clip,
+  });
 }

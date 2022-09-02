@@ -20,20 +20,17 @@ Stabilizes the UI before taking a screenshot.
 
 - `page` - A `puppeteer` page instance
 - `name` - The screenshot name; must be unique
-- `options` - Send to [Page.screenshot command options](https://pptr.dev/next/api/puppeteer.page.screenshot/)
+- `options` - See [Page.screenshot command options](https://pptr.dev/next/api/puppeteer.page.screenshot/)
 
 ```js
-import { puppeteer } from 'puppeteer';
-import { argosScreenshot } from '@argos/puppeteer';
-
-async puppeteerScreenshot(url) => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('http://my-site.com/', { waitUntil: 'networkidle2' });
-  await argosScreenshot(page, 'home');
-
-  await browser.close();
-};
+describe("Integration test with visual testing", () => {
+  it("Loads the homepage", async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(TEST_URL);
+    await argosScreenshot(page, this.test.fullTitle());
+  });
+});
 ```
 
 ## Helper attributes
