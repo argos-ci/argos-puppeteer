@@ -1,7 +1,7 @@
 {
   "name": "@argos-ci/puppeteer",
   "description": "Visual testing solution to avoid visual regression. Puppeteer commands and utilities for Argos visual testing.",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "Smooth Code",
   "license": "MIT",
   "repository": "github:argos-ci/argos-puppeteer",
@@ -28,7 +28,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "jest": "node --experimental-vm-modules node_modules/.bin/jest",
+    "jest": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test": "npm run jest --runInBand",
     "format": "prettier --write .",
     "lint": "eslint --ignore-path .gitignore .",

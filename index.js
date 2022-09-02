@@ -20,32 +20,19 @@ const GLOBAL_STYLES = `
 `;
 
 /**
- * Injected style to hide elements and fix unstable rendering.
- */
-function injectStyles(style) {
-  const css = document.createElement("style");
-  css.type = "text/css";
-  css.textContent = style;
-  document.body.appendChild(css);
-  return true;
-}
-
-/**
  * Check if there is `[aria-busy="true"]` element on the page.
  */
 async function ensureNoBusy() {
-  const isVisible = (element) =>
+  const checkIsVisible = (element) =>
     Boolean(
       element.offsetWidth ||
         element.offsetHeight ||
         element.getClientRects().length
     );
 
-  const res = [...document.querySelectorAll('[aria-busy="true"]')].every(
-    (element) => !isVisible(element)
+  return [...document.querySelectorAll('[aria-busy="true"]')].every(
+    (element) => !checkIsVisible(element)
   );
-  console.log({ ensureNoBusy: res });
-  return res;
 }
 
 // Check if the fonts are loaded
@@ -57,14 +44,15 @@ function waitForFontLoading() {
  * Takes a screenshot for Argos.
  */
 export async function argosScreenshot(page, name, options = {}) {
-  if (!page)
-    throw new Error("An instance of Puppeteer `page` object is required.");
-  if (!name) throw new Error("The `name` argument is required.");
+  if (!page) throw new Error("A Puppeteer `Page` is required.");
+  if (!name) throw new Error("A `name` argument is required.");
 
   try {
-    await page.waitForFunction(injectStyles, {}, GLOBAL_STYLES);
-    await page.waitForFunction(ensureNoBusy);
-    await page.waitForFunction(waitForFontLoading);
+    await Promise.all([
+      page.addStyleTag({ content: GLOBAL_STYLES }),
+      page.waitForFunction(ensureNoBusy),
+      page.waitForFunction(waitForFontLoading),
+    ]);
     await page.screenshot({ path: name, ...options });
   } catch (err) {
     console.error(`Could not take the screenshot "${name}"`);
