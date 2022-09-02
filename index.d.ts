@@ -1,9 +1,15 @@
-import type { Page, ScreenshotOptions } from "puppeteer";
+import type { Page, ScreenshotOptions, ElementHandle } from "puppeteer";
 
-export type ArgosScreenshotOptions = Omit<
-  ScreenshotOptions,
-  "encoding" | "type" | "omitBackground" | "path"
->;
+export interface ArgosScreenshotOptions
+  extends Omit<
+    ScreenshotOptions,
+    "encoding" | "type" | "omitBackground" | "path"
+  > {
+  /**
+   * ElementHandle or string selector of the element to take a screenshot of.
+   */
+  element?: string | ElementHandle;
+}
 
 /**
  * Stabilize the UI and takes a screenshot of the application under test.

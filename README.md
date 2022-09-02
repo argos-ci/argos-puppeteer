@@ -21,6 +21,7 @@ Stabilizes the UI before taking a screenshot.
 - `page` - A `puppeteer` page instance
 - `name` - The screenshot name; must be unique
 - `options` - See [Page.screenshot command options](https://pptr.dev/next/api/puppeteer.page.screenshot/)
+- `options.element` - Accept an ElementHandle or a string selector to screenshot an element
 
 ```js
 describe("Integration test with visual testing", () => {
