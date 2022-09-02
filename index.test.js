@@ -1,7 +1,7 @@
 import "expect-puppeteer";
 import { existsSync } from "fs";
 import puppeteer from "puppeteer";
-import { argosScreenshot } from "./support";
+import { argosScreenshot } from "./index";
 
 const screenshotsFolder = `${process.env.PWD}/screenshots`;
 
