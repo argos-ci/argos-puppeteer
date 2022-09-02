@@ -18,10 +18,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "type": "module",
   "exports": {
-    "./index": {
+    ".": {
       "import": "./index.js",
+      "require": "./index.cjs",
       "types": "./index.d.ts",
       "default": "./index.js"
     },
@@ -31,16 +35,27 @@
     "jest": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test": "npm run jest --runInBand",
     "format": "prettier --write .",
+    "check-format": "prettier --check .",
     "lint": "eslint --ignore-path .gitignore .",
     "release": "standard-version && conventional-github-releaser --preset angular"
   },
+  "peerDependencies": {
+    "puppeteer": ">=1"
+  },
   "devDependencies": {
+    "@argos-ci/cli": "^0.1.2",
     "@types/jest": "^28.1.8",
+    "conventional-github-releaser": "^3.1.5",
     "eslint": "^8.23.0",
     "eslint-plugin-html": "^7.1.0",
     "jest": "^29.0.1",
+    "jest-light-runner": "^0.4.0",
     "jest-puppeteer": "^6.1.1",
     "prettier": "^2.7.1",
-    "puppeteer": "^17.0.0"
+    "puppeteer": "^17.0.0",
+    "standard-version": "^9.5.0"
+  },
+  "dependencies": {
+    "mkdirp": "^1.0.4"
   }
 }

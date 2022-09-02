@@ -1,32 +1,65 @@
 import "expect-puppeteer";
 import puppeteer from "puppeteer";
-import { argosScreenshot } from "./index";
-import { existsFile } from "./utils";
+import { fileURLToPath } from "node:url";
+import { stat } from "node:fs/promises";
+import { argosScreenshot } from "./index.js";
+import { argosScreenshot as argosScreenshotCjs } from "./index.cjs";
 
-const screenshotsFolder = "screenshots";
+export async function exists(path) {
+  try {
+    await stat(path);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 describe("argosScreenshot", () => {
   let browser;
   let page;
-  const url = new URL("fixtures/dummy.html", import.meta.url).href;
-  const screenshotName = "dummy-page.png";
-  const screenshotPath = `${screenshotsFolder}/${screenshotName}`;
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2" });
-    await argosScreenshot(page, screenshotPath);
+    await page.goto(new URL("fixtures/dummy.html", import.meta.url).href, {
+      waitUntil: "networkidle2",
+    });
   }, 30000);
 
-  afterAll(() => {
-    browser.close();
+  afterAll(async () => {
+    await browser.close();
   });
 
-  describe("argosScreenshot", () => {
-    it("should waits for loader hiding", async () => {
+  describe("without page", () => {
+    it("throws an error", async () => {
+      expect.assertions(1);
+      try {
+        await argosScreenshot();
+      } catch (error) {
+        expect(error.message).toBe("A Puppeteer `page` object is required.");
+      }
+    });
+  });
+
+  describe("without name", () => {
+    it("throws an error", async () => {
+      expect.assertions(1);
+      try {
+        await argosScreenshot(page);
+      } catch (error) {
+        expect(error.message).toBe("The `name` argument is required.");
+      }
+    });
+  });
+
+  describe("screenshot page", () => {
+    beforeAll(async () => {
+      await argosScreenshot(page, "page");
+    });
+
+    it("waits for loader hiding", async () => {
       const loaderContainer = await page.$eval(
         "#loader-container",
         (div) => div.innerHTML
@@ -51,39 +84,30 @@ describe("argosScreenshot", () => {
     });
 
     it("takes a screenshot", async () => {
-      const fileExists = await existsFile(screenshotPath);
-      expect(fileExists).toBe(true);
+      const filepath = fileURLToPath(
+        new URL("screenshots/argos/page.png", import.meta.url).href
+      );
+      expect(await exists(filepath)).toBe(true);
     });
   });
 
-  describe("with omitBackground options", () => {
-    it("should take a screenshot without background", async () => {
-      const screenshotPath = `${screenshotsFolder}/no-background.png`;
-      await argosScreenshot(page, screenshotPath, { omitBackground: true });
-      const fileExists = await existsFile(screenshotPath);
-      expect(fileExists).toBe(true);
+  describe("with fullPage option", () => {
+    it("takes a screenshot of full page", async () => {
+      await argosScreenshot(page, "full-page", { fullPage: true });
+      const filepath = fileURLToPath(
+        new URL("screenshots/argos/full-page.png", import.meta.url).href
+      );
+      expect(await exists(filepath)).toBe(true);
     });
   });
 
-  describe("without name", () => {
-    it("should throw an error", async () => {
-      expect.assertions(1);
-      try {
-        await argosScreenshot(page);
-      } catch (error) {
-        expect(error.message).toBe("A `name` argument is required.");
-      }
-    });
-  });
-
-  describe("without page", () => {
-    it("should throw an error", async () => {
-      expect.assertions(1);
-      try {
-        await argosScreenshot(null, `${screenshotsFolder}/${screenshotName}`);
-      } catch (error) {
-        expect(error.message).toBe("A Puppeteer `Page` is required.");
-      }
+  describe("with cjs version", () => {
+    it("works", async () => {
+      await argosScreenshotCjs(page, "full-page-cjs", { fullPage: true });
+      const filepath = fileURLToPath(
+        new URL("screenshots/argos/full-page-cjs.png", import.meta.url).href
+      );
+      expect(await exists(filepath)).toBe(true);
     });
   });
 });

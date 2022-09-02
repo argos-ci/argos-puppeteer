@@ -1,7 +1,18 @@
 import type { Page, ScreenshotOptions } from "puppeteer";
 
+export type ArgosScreenshotOptions = Omit<
+  ScreenshotOptions,
+  "encoding" | "type" | "omitBackground" | "path"
+>;
+
+/**
+ * Stabilize the UI and takes a screenshot of the application under test.
+ * @example
+ *    await argosScreenshot(page, "my-screenshot")
+ *    await argosScreenshot(page, "my-screenshot", { fullPage: true })
+ */
 export function argosScreenshot(
   page: Page,
   name: string,
-  options?: ScreenshotOptions
+  options?: ArgosScreenshotOptions
 ): Promise<void>;

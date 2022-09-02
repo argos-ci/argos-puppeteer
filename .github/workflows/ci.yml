@@ -25,10 +25,13 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Check format
+        run: npm run check-format
+
       - name: Test
         run: npm run test
 
       - name: Argos upload screenshots
-        run: npx @argos-ci/cli upload screenshots-folder
+        run: npx @argos-ci/cli upload screenshots/argos
         env:
           ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
