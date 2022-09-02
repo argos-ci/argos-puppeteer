@@ -21,6 +21,7 @@ Stabilizes the UI before taking a screenshot.
 - `page` - A `puppeteer` page instance
 - `name` - The screenshot name; must be unique
 - `options` - See [Page.screenshot command options](https://pptr.dev/next/api/puppeteer.page.screenshot/)
+- `options.element` - Accept an ElementHandle or a string selector to screenshot an element
 
 ```js
 describe("Integration test with visual testing", () => {
@@ -33,7 +34,9 @@ describe("Integration test with visual testing", () => {
 });
 ```
 
-## Helper attributes
+Screenshots are stored in `screenshots/argos` folder, relative to current directory.
+
+### Helper attributes
 
 The `data-visual-test` attributes allow you to control how elements behave in the Argos screenshot.
 

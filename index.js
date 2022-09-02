@@ -43,22 +43,38 @@ function waitForFontLoading() {
   return document.fonts.status === "loaded";
 }
 
-export async function argosScreenshot(page, name, { fullPage, clip } = {}) {
+export async function argosScreenshot(
+  page,
+  name,
+  { element = page, ...options } = {}
+) {
   if (!page) throw new Error("A Puppeteer `page` object is required.");
   if (!name) throw new Error("The `name` argument is required.");
 
-  await Promise.all([
+  if (typeof element === "string") {
+    await page.waitForSelector(element);
+    element = await page.$(element);
+  }
+
+  const directory = resolve(process.cwd(), "screenshots/argos");
+
+  const [resolvedElement] = await Promise.all([
+    (async () => {
+      if (typeof element === "string") {
+        await page.waitForSelector(element);
+        return page.$(element);
+      }
+      return element;
+    })(),
+    mkdirp(directory),
     page.addStyleTag({ content: GLOBAL_STYLES }),
     page.waitForFunction(ensureNoBusy),
     page.waitForFunction(waitForFontLoading),
   ]);
 
-  const directory = resolve(process.cwd(), "screenshots/argos");
-  await mkdirp(directory);
-  await page.screenshot({
+  await resolvedElement.screenshot({
     path: resolve(directory, `${name}.png`),
     type: "png",
-    fullPage,
-    clip,
+    ...options,
   });
 }

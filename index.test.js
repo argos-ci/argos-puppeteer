@@ -101,6 +101,16 @@ describe("argosScreenshot", () => {
     });
   });
 
+  describe("screenshot element", () => {
+    it("takes a screenshot of an element", async () => {
+      await argosScreenshot(page, "element", { element: ".red-square" });
+      const filepath = fileURLToPath(
+        new URL("screenshots/argos/element.png", import.meta.url).href
+      );
+      expect(await exists(filepath)).toBe(true);
+    });
+  });
+
   describe("with cjs version", () => {
     it("works", async () => {
       await argosScreenshotCjs(page, "full-page-cjs", { fullPage: true });
