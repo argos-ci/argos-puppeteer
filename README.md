@@ -33,7 +33,9 @@ describe("Integration test with visual testing", () => {
 });
 ```
 
-## Helper attributes
+Screenshots are stored in `screenshots/argos` folder, relative to current directory.
+
+### Helper attributes
 
 The `data-visual-test` attributes allow you to control how elements behave in the Argos screenshot.
 
