@@ -38,9 +38,27 @@ async function ensureNoBusy() {
   );
 }
 
-// Check if the fonts are loaded
-function waitForFontLoading() {
+/**
+ * Wait for all fonts to be loaded.
+ */
+function waitForFonts() {
   return document.fonts.status === "loaded";
+}
+
+/**
+ * Wait for all images to be loaded.
+ */
+async function waitForImages() {
+  return Promise.all(
+    Array.from(document.images)
+      .filter((img) => !img.complete)
+      .map(
+        (img) =>
+          new Promise((resolve) => {
+            img.onload = img.onerror = resolve;
+          })
+      )
+  );
 }
 
 export async function argosScreenshot(
@@ -69,7 +87,8 @@ export async function argosScreenshot(
     mkdirp(directory),
     page.addStyleTag({ content: GLOBAL_STYLES }),
     page.waitForFunction(ensureNoBusy),
-    page.waitForFunction(waitForFontLoading),
+    page.waitForFunction(waitForFonts),
+    page.waitForFunction(waitForImages),
   ]);
 
   await resolvedElement.screenshot({
