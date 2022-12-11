@@ -1,4 +1,4 @@
-name: Trigger https://docs.argos-ci.com build
+name: Trigger https://argos-ci.com/docs build
 
 on:
   push:
@@ -11,4 +11,3 @@ jobs:
     steps:
       - name: Call Netlify Webhook
         run: curl -X POST -d {} https://api.netlify.com/build_hooks/6355731ceb0bed1962bae7fc
-

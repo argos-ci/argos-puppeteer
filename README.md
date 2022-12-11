@@ -12,9 +12,9 @@ _Argos is a visual testing solution that fits in your workflow to avoid visual r
 [![npm dm](https://img.shields.io/npm/dm/@argos-ci/puppeteer.svg)](https://www.npmjs.com/package/@argos-ci/puppeteer)
 [![npm dt](https://img.shields.io/npm/dt/@argos-ci/puppeteer.svg)](https://www.npmjs.com/package/@argos-ci/puppeteer)
 
-Visit [docs.argos-ci.com/puppeteer](https://docs.argos-ci.com/puppeteer) for guides, API and more.
+Visit [argos-ci.com/docs/puppeteer](https://argos-ci.com/docs/puppeteer) for guides, API and more.
 
 ## Links
 
-- [Official SDK Docs](https://docs.argos-ci.com/)
+- [Official SDK Docs](https://argos-ci.com/docs/)
 - [Discord](https://discord.gg/WjzGrQGS4A)
