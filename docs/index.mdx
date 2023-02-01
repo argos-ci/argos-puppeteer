@@ -29,6 +29,9 @@ npm install --save-dev @argos-ci/cli @argos-ci/puppeteer
 _How to take a screenshot with `argosScreenshot` command_
 
 ```js
+import puppeteer from "puppeteer";
+import { argosScreenshot } from "@argos-ci/puppeteer";
+
 describe("Integration test with visual testing", () => {
   it("loads the homepage", async () => {
     const browser = await puppeteer.launch();
