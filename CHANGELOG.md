@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/argos-ci/argos-puppeteer/compare/v0.0.2...v0.0.3) (2023-09-21)
+
+
+### Features
+
+* disable spellcheck in argosScreenshot ([#10](https://github.com/argos-ci/argos-puppeteer/issues/10)) ([f9e19ff](https://github.com/argos-ci/argos-puppeteer/commit/f9e19ff7fd519e221e82a7a6d1f551a0d38d27bc))
+* update old doc link ([578b1c4](https://github.com/argos-ci/argos-puppeteer/commit/578b1c41b44a9e9fd98a7f805f17aca2b4879bf7))
+* update readme snippet ([74a8f55](https://github.com/argos-ci/argos-puppeteer/commit/74a8f558f1be4aeabd0d6ad89de08b18a00a0f21))
+
 ### 0.0.2 (2022-10-23)
 
 
