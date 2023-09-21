@@ -61,6 +61,17 @@ async function waitForImages() {
   );
 }
 
+/**
+ *  Disable spellcheck to avoid red underlines
+ */
+function disableSpellCheck() {
+  const query =
+    "[contenteditable]:not([contenteditable=false]):not([spellcheck=false]), input:not([spellcheck=false]), textarea:not([spellcheck=false])";
+  const inputs = document.querySelectorAll(query);
+  inputs.forEach((input) => input.setAttribute("spellcheck", "false"));
+  return true;
+}
+
 export async function argosScreenshot(
   page,
   name,
@@ -89,6 +100,7 @@ export async function argosScreenshot(
     page.waitForFunction(ensureNoBusy),
     page.waitForFunction(waitForFonts),
     page.waitForFunction(waitForImages),
+    page.waitForFunction(disableSpellCheck),
   ]);
 
   await resolvedElement.screenshot({
